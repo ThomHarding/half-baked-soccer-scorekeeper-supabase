@@ -22,7 +22,7 @@ export async function createGame(game){
     const response = await client
         .from ('games')
         .insert({
-            game,
+            ...game,
             user_id: client.auth.user().id,
         })
         .single();

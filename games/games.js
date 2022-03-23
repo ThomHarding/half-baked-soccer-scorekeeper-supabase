@@ -27,6 +27,7 @@ let name1 = '';
 let name2 = '';
 let score1 = 0;
 let score2 = 0;
+let currentGame = { name1: '', name2: '', score1: 0, score2: 0 };
 
 nameForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -68,7 +69,8 @@ teamTwoSubtractButton.addEventListener('click', () => {
 
 finishGameButton.addEventListener('click', async() => {
     // create a new game using the current game state
-    await createGame({ name1: name1, name2:name2, score1: score1, score2: score2 });
+    updateCurrentGame();
+    await createGame(currentGame);
     // after creating this new game, re-fetch the games to get the updated state and display them (hint: call displayAllGames())
     pastGames = await getGames();
     displayAllGames();
@@ -84,31 +86,42 @@ logoutButton.addEventListener('click', () => {
 });
 
  // on load . . .
-window.addEventListener('', async() => {
+window.addEventListener('load', async() => {
+    pastGames = await getGames();
     // display all past games (hint: call displayAllGames())
+    displayAllGames();
 });
 
 
 function displayCurrentGameEl() {
     // clear out the current game div
-
+    currentGameEl.textContent = '';
     // change the label to show team one's name;
+    teamOneLabel.textContent = name1;
     // change the label to show team two's name;
-
+    teamTwoLabel.textContent = name2;
     // call the render game function to create a game element
-    
+    let renderedGame = renderGame(currentGame);
     // append the element to the cleared out current game div
+    currentGameEl.append(renderedGame);
 }
 
 
-function displayAllGames() {
+async function displayAllGames() {
     // clear out the past games list in the DOM
-    
+    pastGamesEl.innerHTML = '';
+    pastGames = await getGames();
     // FETCH ALL GAMES from supabase
-
+    for (let game of pastGames) {
+        let renderedGame = renderGame(game);
+        pastGamesEl.append(renderedGame);
+    }
     // loop through the past games 
     // render and append a past game for each past game in state
 }
 
+function updateCurrentGame() {
+    currentGame = { name1: name1, name2:name2, score1: score1, score2: score2 };
+}
 
 displayCurrentGameEl();
