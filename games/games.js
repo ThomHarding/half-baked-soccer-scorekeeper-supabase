@@ -21,58 +21,61 @@ const teamTwoLabel = document.getElementById('team-two-name');
 
 checkAuth();
 
+let pastGames = [];
+
 let name1 = '';
 let name2 = '';
 let score1 = 0;
 let score2 = 0;
 
 nameForm.addEventListener('submit', (e) => {
+    e.preventDefault();
     // don't forget to prevent the default form behavior!
-
+    let data = new FormData(nameForm);
     // get the name data from the form
-
     // set the state to this data from the form
-
+    name1 = data.get('team-one');
+    name2 = data.get('team-two');
     // reset the form values
-
-    displayCurrentGameEl()
+    nameForm.reset();
+    displayCurrentGameEl();
 });
 
 
 teamOneAddButton.addEventListener('click', () => {
     // increment the current state for team one's score
-    
-    displayCurrentGameEl()
+    score1++;
+    displayCurrentGameEl();
 });
 
 teamTwoAddButton.addEventListener('click', () => {
     // increment the current state for team two's score
-
-    displayCurrentGameEl()
+    score2++;
+    displayCurrentGameEl();
 });
 
 teamOneSubtractButton.addEventListener('click', () => {
     // decrement the current state for team one's score
-
-    displayCurrentGameEl()
+    score1--;
+    displayCurrentGameEl();
 });
 
 teamTwoSubtractButton.addEventListener('click', () => {
     // decrement the current state for team two's score
-
-    displayCurrentGameEl()
+    score2--;
+    displayCurrentGameEl();
 });
 
 finishGameButton.addEventListener('click', async() => {
     // create a new game using the current game state
-    
+    await createGame({ name1: name1, name2:name2, score1: score1, score2: score2 });
     // after creating this new game, re-fetch the games to get the updated state and display them (hint: call displayAllGames())
-            
+    pastGames = await getGames();
+    displayAllGames();
     name1 = '';
     name2 = '';
     score1 = 0;
     score2 = 0;
-
     displayCurrentGameEl();
 });
 
