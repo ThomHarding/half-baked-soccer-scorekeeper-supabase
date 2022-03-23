@@ -102,7 +102,9 @@ function displayCurrentGameEl() {
     teamTwoLabel.textContent = name2;
     // call the render game function to create a game element
     let renderedGame = renderGame(currentGame);
+    renderedGame.classList.add('current');
     // append the element to the cleared out current game div
+    updateCurrentGame();
     currentGameEl.append(renderedGame);
 }
 
